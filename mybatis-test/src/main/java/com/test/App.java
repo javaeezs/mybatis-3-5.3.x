@@ -21,14 +21,14 @@ public class App {
         SqlSession session = sqlSessionFactory.openSession();
         try {
             // 执行查询 底层执行jdbc 3
-            User user =  session.selectOne("com.test.mapper.UserMapper.selectById", 1);
+            User user =  session.selectOne("com.test.mapper.UserMapper.selectByPrimaryKey", 1L);
 
             // 创建动态代理
            /* UserMapper mapper = session.getMapper(UserMapper.class);
             System.out.println(mapper.getClass());
             User user = mapper.selectById(1);*/
             System.out.println(user.getUserName());
-
+            System.out.println(user.getCreateTime());
             session.commit();
         } catch (Exception e) {
             e.printStackTrace();
