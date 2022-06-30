@@ -443,6 +443,8 @@ public class XMLConfigBuilder extends BaseBuilder {
         String id = child.getStringAttribute("id");
         if (isSpecifiedEnvironment(id)) {
           TransactionFactory txFactory = transactionManagerElement(child.evalNode("transactionManager"));
+          // 在dataSourceElement->context.getChildrenAsProperties()->getChildren()->new XNode(xpathParser, node, variables)解析${}
+          // 将Node封装成XNode，同时解析${}
           DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));
           DataSource dataSource = dsFactory.getDataSource();
           Environment.Builder environmentBuilder = new Environment.Builder(id)

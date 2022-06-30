@@ -7,7 +7,7 @@
 
 
     <plugins>
-        <plugin interceptor="com.test.plugins.ExamplePlugin" ></plugin>
+        <plugin interceptor="com.test.plugins.ExamplePlugin1" ></plugin>
     </plugins>
     <environments default="development">
         <environment id="development">

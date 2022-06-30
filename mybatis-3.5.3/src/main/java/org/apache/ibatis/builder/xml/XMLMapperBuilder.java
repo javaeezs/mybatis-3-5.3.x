@@ -301,7 +301,7 @@ public class XMLMapperBuilder extends BaseBuilder {
    */
   private void cacheElement(XNode context) {
     if (context != null) {
-      //解析cache节点的type属性
+      //解析cache节点的type属性，这里可以自定义缓存的实现类，比如redisCache，如果没有自定义，则默认使用PerpetualCache
       String type = context.getStringAttribute("type", "PERPETUAL");
       // 根据别名（或完整限定名）  加载为Class
       Class<? extends Cache> typeClass = typeAliasRegistry.resolveAlias(type);
@@ -311,14 +311,17 @@ public class XMLMapperBuilder extends BaseBuilder {
       SOFT – 软引用：基于垃圾回收器状态和软引用规则移除对象。
       WEAK – 弱引用：更积极地基于垃圾收集器状态和弱引用规则移除对象。
       */
+      //负责过期的缓存实现类
       String eviction = context.getStringAttribute("eviction", "LRU");
       Class<? extends Cache> evictionClass = typeAliasRegistry.resolveAlias(eviction);
       //flushInterval（刷新间隔）属性可以被设置为任意的正整数，设置的值应该是一个以毫秒为单位的合理时间量。 默认情况是不设置，也就是没有刷新间隔，缓存仅仅会在调用语句时刷新。
+      //清空缓存的频率，0代表不清空
       Long flushInterval = context.getLongAttribute("flushInterval");
-      //size（引用数目）属性可以被设置为任意正整数，要注意欲缓存对象的大小和运行环境中可用的内存资源。默认值是 1024。
+      //缓存容器大小，size（引用数目）属性可以被设置为任意正整数，要注意欲缓存对象的大小和运行环境中可用的内存资源。默认值是 1024。
       Integer size = context.getIntAttribute("size");
       //只读）属性可以被设置为 true 或 false。只读的缓存会给所有调用者返回缓存对象的相同实例。 因此这些对象不能被修改。这就提供了可观的性能提升。而可读写的缓存会（通过序列化）返回缓存对象的拷贝。 速度上会慢一些，但是更安全，因此默认值是 false
       boolean readWrite = !context.getBooleanAttribute("readOnly", false);
+      //是否阻塞
       boolean blocking = context.getBooleanAttribute("blocking", false);
       Properties props = context.getChildrenAsProperties();
       //把缓存节点加入到Configuration中
